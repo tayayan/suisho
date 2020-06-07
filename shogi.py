@@ -3,9 +3,12 @@ import random
 import Bboard
 import Wboard
 import board
-import oute
 import Bmoves
 import Wmoves
+import Beval
+import Weval
+import Bkikimoves1
+import Wkikimoves1
 
 #usiコマンドに対応する根幹部分
 sfen =''
@@ -32,17 +35,27 @@ while i < 5:
         if board.turn == 1:
             Bmoves.move1()
             print(f'{Bmoves.depth1=}')
+            moves = Bmoves.depth1
             #合法手がなければ投了
             if Bmoves.depth1==[]:
                 print('bestmove resign')
             #合法手があればランダムで選択
             else:
-                print('bestmove '+Bmoves.depth1[random.randint(0,len(Bmoves.depth1)-1)])
+                Beval.eval(moves)
+                if Wkikimoves1.depth1 == []:
+                    break
+                print('info score cp '+ str(max(Beval.score)))
+                print('bestmove '+Bmoves.depth1[Beval.sashite])
         #後手番も同じ
         else:
             Wmoves.move1()
             print(f'{Wmoves.depth1=}')
+            moves = Wmoves.depth1
             if Wmoves.depth1==[]:
                 print('bestmove resign')
             else:
-                print('bestmove '+Wmoves.depth1[random.randint(0,len(Wmoves.depth1)-1)])
+                Weval.eval(moves)
+                if Bkikimoves1.depth1 == []:
+                    break
+                print('info score cp '+str(max(Weval.score)))
+                print('bestmove '+Wmoves.depth1[Weval.sashite])
